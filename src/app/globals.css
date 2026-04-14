@@ -1,0 +1,154 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+:root {
+  --electric-blue: #007AFF;
+  --cyber-gold: #FFD700;
+  --fiery-pink: #FF007F;
+  --deep-black: #030303;
+  --primary: #007AFF;
+  --primary-foreground: #ffffff;
+  --background: #030303;
+  --foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.03);
+  --card-foreground: #ffffff;
+  --popover: rgba(255, 255, 255, 0.05);
+  --popover-foreground: #ffffff;
+  --secondary: rgba(255, 215, 0, 0.1);
+  --secondary-foreground: #FFD700;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #007AFF;
+  --accent-foreground: #ffffff;
+  --destructive: #FF007F;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: #007AFF;
+  --chart-1: #00C2FF;
+  --chart-2: #007AFF;
+  --chart-3: #FFD700;
+  --chart-4: #FF007F;
+  --chart-5: #FF4D94;
+  --radius: 1.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .liquid-glass {
+    @apply bg-white/[0.03] backdrop-blur-xl backdrop-saturate-180 border border-white/[0.08] rounded-3xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+  .liquid-glass:hover {
+    @apply border-white/[0.12] bg-white/[0.05];
+  }
+  .btn-dopamine-blue {
+    @apply bg-blue-500 text-white font-black tracking-tight rounded-2xl px-8 py-4 transition-all duration-300;
+    box-shadow: 0 0 20px rgba(0, 122, 255, 0.4);
+  }
+  .btn-dopamine-blue:hover {
+    box-shadow: 0 0 40px rgba(0, 122, 255, 0.7);
+    @apply -translate-y-1;
+  }
+  .btn-dopamine-gold {
+    @apply bg-yellow-400 text-black font-black tracking-tight rounded-2xl px-8 py-4 transition-all duration-300;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  }
+  .btn-dopamine-gold:hover {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.7);
+    @apply -translate-y-1;
+  }
+  .text-gradient-blue {
+    @apply bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent;
+  }
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent;
+  }
+  .text-gradient-pink {
+    @apply bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-reveal {
+    animation: reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .glow-blue {
+    box-shadow: 0 0 30px rgba(0, 122, 255, 0.3), inset 0 0 30px rgba(0, 122, 255, 0.1);
+  }
+  .glow-gold {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 30px rgba(255, 215, 0, 0.1);
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    display: flex;
+    width: 200%;
+    animation: marquee 30s linear infinite;
+  }
+}
