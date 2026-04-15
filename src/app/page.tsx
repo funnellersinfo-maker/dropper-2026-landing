@@ -3,6 +3,7 @@
 import Navigation from "@/components/dropper/Navigation";
 import Hero from "@/components/dropper/Hero";
 import BentoGrid from "@/components/dropper/BentoGrid";
+import ColombiaMarket from "@/components/dropper/ColombiaMarket";
 import AutomationFunnel from "@/components/dropper/AutomationFunnel";
 import Pricing from "@/components/dropper/Pricing";
 import FAQ from "@/components/dropper/FAQ";
@@ -17,6 +18,7 @@ export default function Home() {
       <main>
         <Hero />
         <BentoGrid />
+        <ColombiaMarket />
         <AutomationFunnel />
         <Pricing />
         <FAQ />
