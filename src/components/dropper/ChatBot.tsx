@@ -20,6 +20,11 @@ const EMOJI_CATEGORIES = [
 
 const INITIAL_MESSAGE = "¡Hola! Soy el Agente de IA de Dropper 🤖\n\nPregúntame lo que quieras sobre Dropper, planes, IA, logística, ganancias... o cualquier tema. ¡Escribe y te respondo! 🚀";
 
+const QUICK_PROMPTS = [
+  "¿Cuánto cuestan los planes?",
+  "¿Cuánto puedo ganar?",
+];
+
 const SESSION_ID = `chat_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 
 export default function ChatBot() {
@@ -30,6 +35,7 @@ export default function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [showEmojis, setShowEmojis] = useState(false);
+  const [showPrompts, setShowPrompts] = useState(true);
   const [emojiCat, setEmojiCat] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +72,7 @@ export default function ChatBot() {
     const text = overrideText || input.trim();
     if (!text || isLoading) return;
     setShowEmojis(false);
+    setShowPrompts(false);
 
     setMessages(prev => [...prev, { id: Date.now().toString(), text, sender: "user" }]);
     setInput("");
@@ -121,6 +128,22 @@ export default function ChatBot() {
             </div>
           </div>
         ))}
+
+        {/* Quick Prompts - inside scrollable area */}
+        {showPrompts && (
+          <div className="flex flex-col gap-2 pt-1 transition-all duration-300">
+            {QUICK_PROMPTS.map((q) => (
+              <button
+                key={q}
+                onClick={() => handleSend(q)}
+                disabled={isLoading}
+                className="w-full text-left text-[12px] md:text-[13px] bg-white/[0.05] hover:bg-white/[0.08] active:bg-blue-500/20 border border-white/[0.08] active:border-blue-500/30 rounded-xl px-3.5 py-2.5 text-gray-400 hover:text-gray-200 active:text-white transition-all duration-150"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Typing */}
         {isLoading && (
