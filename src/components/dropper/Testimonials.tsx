@@ -14,9 +14,9 @@ export default function Testimonials() {
   }, []);
 
   const testimonials = [
-    { name: "Carlos Mendoza", role: "Dropper Élite", text: "En 3 meses pasé de $0 a $15,000 USD mensuales. Dropper automatizó todo lo que no sabía cómo hacer.", image: "https://i.pravatar.cc/100?u=4" },
-    { name: "María Rodríguez", role: "Emprendedora Digital", text: "La IA hace el trabajo que antes me tomaba 40 horas semanales. Ahora solo genero tráfico y gano.", image: "https://i.pravatar.cc/100?u=5" },
-    { name: "Juana Pérez", role: "Emprendedora E-commerce", text: "Pago una sola vez y tengo infraestructura vitalicia. Es el mejor ROI que he hecho en mi vida.", image: "https://i.pravatar.cc/100?u=6" },
+    { name: "Carlos Mendoza", role: "Dropper Élite", text: "En 3 meses pasé de $0 a $15,000 USD mensuales. Dropper automatizó todo lo que no sabía cómo hacer.", image: "/testimonials/carlos.jpg" },
+    { name: "María Rodríguez", role: "Emprendedora Digital", text: "La IA hace el trabajo que antes me tomaba 40 horas semanales. Ahora solo genero tráfico y gano.", image: "/testimonials/maria.jpg" },
+    { name: "Juana Pérez", role: "Emprendedora E-commerce", text: "Pago una sola vez y tengo infraestructura vitalicia. Es el mejor ROI que he hecho en mi vida.", image: "/testimonials/juana.jpg" },
   ];
 
   return (
