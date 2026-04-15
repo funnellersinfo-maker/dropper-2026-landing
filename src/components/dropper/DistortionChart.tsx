@@ -1,28 +1,23 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 export default function DistortionChart() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number | null>(null);
   const timeRef = useRef<number>(0);
-  const rafPending = useRef(false);
 
   useEffect(() => {
-    const handleMouseMove = useCallback((e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
         mousePosRef.current = {
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
         };
-        if (!rafPending.current) {
-          rafPending.current = true;
-          requestAnimationFrame(() => { rafPending.current = false; });
-        }
       }
-    }, []);
+    };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
