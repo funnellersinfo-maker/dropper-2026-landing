@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, MessageCircle, Sparkles, Smile, X, ChevronDown, Minimize2 } from "lucide-react";
+import { Send, MessageCircle, Sparkles, Smile, X } from "lucide-react";
 
 interface Message {
   id: string;
@@ -10,12 +10,10 @@ interface Message {
   timestamp: Date;
 }
 
-const QUICK_PROMPTS = [
+const QUICK_PROMPTS_MOBILE = [
   "¿Cómo funciona Dropper?",
   "¿Cuánto cuestan los planes?",
   "¿Cuánto puedo ganar?",
-  "¿Cómo funciona la logística?",
-  "¿Qué plan me recomiendas?",
 ];
 
 const EMOJI_CATEGORIES = [
@@ -51,14 +49,13 @@ const SESSION_ID = `mobile_dropper_${Date.now()}_${Math.random().toString(36).sl
 
 export default function MobileChat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { id: "0", text: INITIAL_MESSAGE, sender: "bot", timestamp: new Date() },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
-  const [promptsVisible, setPromptsVisible] = useState(true);
+  const [showPrompts, setShowPrompts] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [activeEmojiCategory, setActiveEmojiCategory] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -69,7 +66,7 @@ export default function MobileChat() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, showPrompts]);
 
   useEffect(() => {
     if (emojiScrollRef.current) {
@@ -78,17 +75,13 @@ export default function MobileChat() {
   }, [activeEmojiCategory]);
 
   useEffect(() => {
-    if (isOpen && !isMinimized) {
+    if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
-  }, [isOpen, isMinimized]);
-
-  const collapsePrompts = useCallback(() => {
-    setPromptsVisible(false);
-  }, []);
+  }, [isOpen]);
 
   const sendToAI = useCallback(async (userText: string): Promise<string> => {
     try {
@@ -112,7 +105,8 @@ export default function MobileChat() {
     const textToSend = overrideText || input.trim();
     if (!textToSend || isLoading) return;
 
-    collapsePrompts();
+    // Hide prompts instantly on any send
+    setShowPrompts(false);
     setShowEmojiPicker(false);
 
     const userMsg: Message = {
@@ -149,23 +143,21 @@ export default function MobileChat() {
     }
   };
 
-  const hasStartedChat = messages.length > 1;
-
   return (
     <>
       {/* Floating FAB button */}
       <button
-        onClick={() => { setIsOpen(true); setIsMinimized(false); }}
+        onClick={() => setIsOpen(true)}
         className="fixed bottom-5 right-5 z-50 w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-xl shadow-blue-500/40 active:scale-95 transition-transform duration-200"
       >
         <MessageCircle className="w-7 h-7 text-white" />
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black" />
       </button>
 
-      {/* Chat Overlay */}
+      {/* Chat Overlay - Full screen */}
       {isOpen && (
         <div className="fixed inset-0 z-[60] flex flex-col bg-black animate-reveal">
-          {/* Header - fixed top */}
+          {/* Header */}
           <div className="flex-shrink-0 bg-gradient-to-r from-blue-950 to-black border-b border-white/[0.08] px-4 pt-[env(safe-area-inset-top,12px)] pb-3">
             <div className="flex items-center gap-2.5">
               <button
@@ -193,7 +185,7 @@ export default function MobileChat() {
             </div>
           </div>
 
-          {/* Messages area - scrollable */}
+          {/* Messages area + Quick Prompts (all scrollable together) */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} animate-reveal`}>
@@ -214,6 +206,22 @@ export default function MobileChat() {
               </div>
             ))}
 
+            {/* Quick Prompts - INSIDE scrollable area, only 3, disappear on tap */}
+            {showPrompts && (
+              <div className="flex flex-col gap-2 pt-2 pb-1">
+                {QUICK_PROMPTS_MOBILE.map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => handleSendMessage(q)}
+                    disabled={isLoading}
+                    className="w-full text-left text-[13px] bg-white/[0.06] active:bg-blue-500/25 disabled:opacity-40 border border-white/[0.1] active:border-blue-500/30 rounded-2xl px-4 py-3 text-gray-300 active:text-white transition-all duration-150"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Typing indicator */}
             {isLoading && (
               <div className="flex justify-start items-center gap-2">
@@ -232,41 +240,9 @@ export default function MobileChat() {
             )}
           </div>
 
-          {/* Quick Prompts - slide down on first message */}
-          {promptsVisible && !hasStartedChat && (
-            <div className={`flex-shrink-0 px-4 transition-all duration-300 ease-in-out ${
-              promptsVisible ? "max-h-24 opacity-100 translate-y-0 pb-2" : "max-h-0 opacity-0 translate-y-4 overflow-hidden"
-            }`}>
-              <div className="flex flex-wrap gap-1.5">
-                {QUICK_PROMPTS.map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => handleSendMessage(q)}
-                    disabled={isLoading}
-                    className="text-[11px] bg-white/[0.06] hover:bg-white/[0.1] active:bg-blue-500/30 disabled:opacity-40 border border-white/[0.1] rounded-full px-3 py-1.5 text-gray-300 active:text-white transition-all duration-200"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Restore prompts */}
-          {!promptsVisible && hasStartedChat && (
-            <button
-              onClick={() => setPromptsVisible(true)}
-              className="flex-shrink-0 self-center flex items-center gap-1 text-[11px] text-gray-500 hover:text-gray-300 pb-1.5 transition-colors"
-            >
-              <ChevronDown className="w-3 h-3" />
-              Preguntas rápidas
-            </button>
-          )}
-
           {/* Emoji Picker */}
           {showEmojiPicker && (
             <div className="flex-shrink-0 mx-3 mb-2 bg-black/60 backdrop-blur-xl rounded-2xl border border-white/[0.08] overflow-hidden animate-reveal">
-              {/* Category tabs */}
               <div className="flex gap-1 px-2 pt-2 pb-1 overflow-x-auto">
                 {EMOJI_CATEGORIES.map((cat, idx) => (
                   <button
@@ -282,7 +258,6 @@ export default function MobileChat() {
                   </button>
                 ))}
               </div>
-              {/* Emoji grid */}
               <div
                 ref={emojiScrollRef}
                 className="h-[130px] overflow-y-auto px-2 py-1.5 grid grid-cols-8 gap-0.5 auto-rows-min"
@@ -300,10 +275,9 @@ export default function MobileChat() {
             </div>
           )}
 
-          {/* Input bar - fixed bottom, WhatsApp style */}
-          <div className="flex-shrink-0 bg-gradient-to-t from-black to-transparent pt-1 px-3 pb-[env(safe-area-inset-bottom,8px)]">
+          {/* Input bar - always fixed at bottom, never overlaps */}
+          <div className="flex-shrink-0 px-3 pb-[env(safe-area-inset-bottom,8px)] pt-2">
             <div className="flex gap-1.5 items-center bg-white/[0.05] border border-white/[0.1] rounded-full px-2 py-1">
-              {/* Emoji button */}
               <button
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 className={`p-2 rounded-full transition-all duration-200 flex-shrink-0 ${
@@ -315,7 +289,6 @@ export default function MobileChat() {
                 {showEmojiPicker ? <X className="w-5 h-5" /> : <Smile className="w-5 h-5" />}
               </button>
 
-              {/* Text input */}
               <input
                 ref={inputRef}
                 type="text"
@@ -328,7 +301,6 @@ export default function MobileChat() {
                 disabled={isLoading}
               />
 
-              {/* Send button */}
               <button
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !input.trim()}
