@@ -14,7 +14,7 @@ const QUICK_PROMPTS = [
   "¿Cómo funciona Dropper?",
   "¿Cuánto cuestan los planes?",
   "¿Cuánto puedo ganar?",
-  "Quiero hablar con un humano",
+  "¿Cómo funciona la logística?",
   "¿Qué plan me recomiendas?",
 ];
 
