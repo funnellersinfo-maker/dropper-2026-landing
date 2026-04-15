@@ -1,6 +1,6 @@
 'use client';
 
-import { Send, MessageCircle } from "lucide-react";
+import { Send, MessageCircle, Sparkles } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 
 interface Message {
@@ -11,17 +11,17 @@ interface Message {
 }
 
 const QUICK_PROMPTS = [
-  "¿Cómo funciona?",
-  "¿Cuánto cuesta?",
+  "¿Cómo funciona Dropper?",
+  "¿Cuánto cuestan los planes?",
   "¿Cuánto puedo ganar?",
   "Quiero hablar con un humano",
   "¿Qué plan me recomiendas?",
 ];
 
-const INITIAL_MESSAGE = "¡Hola! Soy el Agente de IA de Dropper 🤖. Estoy aquí para demostrarte cómo puedo cerrar ventas por ti 24/7 mientras tú duermes. Pregúntame lo que quieras — precios, funcionamiento, ganancias, la IA, planes, o incluso cosas fuera de tema. ¡Converso de todo! 🚀";
+const INITIAL_MESSAGE = "¡Hola! Soy el Agente de IA de Dropper 🤖\n\nEstoy conectado a un motor de inteligencia artificial con memoria. Puedes preguntarme cualquier cosa sobre Dropper, los planes, la IA, logística, ganancias, o incluso temas fuera de esto — siempre encontraré una forma natural de ayudarte.\n\n¡Pruébame! Escribe lo que quieras. 🚀";
 
-// Generate a unique session ID per page load (memory per visitor)
-const SESSION_ID = `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+// Unique session per page load for conversation memory
+const SESSION_ID = `dropper_session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
 export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([
@@ -29,6 +29,7 @@ export default function ChatBot() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,9 +54,14 @@ export default function ChatBot() {
       }
 
       const data = await res.json();
-      return data.reply || "Lo siento, no pude procesar tu mensaje. Intenta de nuevo.";
+      if (data.reply) {
+        setIsOnline(true);
+        return data.reply;
+      }
+      throw new Error("Empty reply");
     } catch (error) {
       console.error("Chat fetch error:", error);
+      setIsOnline(false);
       return "Hubo un problema de conexión. ¡Intenta de nuevo o escríbenos por WhatsApp! 📱";
     }
   }, []);
@@ -74,7 +80,7 @@ export default function ChatBot() {
     setInput("");
     setIsLoading(true);
 
-    // Call AI backend with full conversation memory
+    // Call real AI backend
     const botReply = await sendToAI(textToSend);
 
     const botMsg: Message = {
@@ -103,9 +109,15 @@ export default function ChatBot() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
           </span>
-          Agente de Ventas IA — Conversacional
+          <span className="flex items-center gap-1.5">
+            Agente IA Dropper
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          </span>
+          <span className={`ml-auto text-[9px] font-bold tracking-widest px-2 py-0.5 rounded-full ${isOnline ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+            {isOnline ? "IA ONLINE" : "OFFLINE"}
+          </span>
         </h3>
-        <p className="text-xs text-gray-500 mt-1">Con memoria. Pregunta lo que sea, fluye natural.</p>
+        <p className="text-xs text-gray-500 mt-1">Con memoria y conocimiento total de Dropper. Pregunta lo que sea.</p>
       </div>
 
       {/* Messages */}
@@ -168,7 +180,7 @@ export default function ChatBot() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="Escribe lo que quieras..."
+          placeholder="Escribe cualquier pregunta..."
           className="flex-1 bg-white/[0.05] border border-white/[0.1] rounded-full px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-all duration-200"
           disabled={isLoading}
         />
