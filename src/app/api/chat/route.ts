@@ -33,7 +33,7 @@ BASE DE CONOCIMIENTO DE DROPPER (datos reales que debes usar):
 - Logística directa: conexión con bodegas locales e internacionales. Envíos 24-48h en Colombia. Dropper se encarga de todo el fulfilment.
 - Transportadoras aliadas: Coordinadora, Interrapidísimo, Envía, Swayp, TCC.
 - INVIMA: productos con registro sanitario válido. Cero dolores de cabeza legales.
-- Testimonios reales: Carlos Mendoza pasó de $0 a $15,000 USD/mes en 3 meses con el plan Scale. María Rodríguez (plan Boost) redujo 40h semanales a cero gracias al asistente IA. Juan Pérez (plan Core) triplicó su ROI en el primer mes.
+- Testimonios reales: Carlos Mendoza pasó de $0 a $15,000 USD/mes en 3 meses con el plan Scale. María Rodríguez (plan Boost) redujo 40h semanales a cero gracias al asistente IA. Juana Pérez (plan Core) triplicó su ROI en el primer mes.
 - Los Droppers ganan entre $2,000 y $50,000 USD mensuales según tráfico y dedicación.
 - El modelo es simple: usuario genera tráfico → IA convierte → Dropper maneja logística → usuario cobra. Tú solo te enfocas en llevar gente a tu tienda, el resto lo hace el sistema.
 - Empresa: Dropper Ecosistema Global. Est. 2026.
