@@ -9,6 +9,7 @@ import FAQ from "@/components/dropper/FAQ";
 import Testimonials from "@/components/dropper/Testimonials";
 import Footer from "@/components/dropper/Footer";
 import FloatingWhatsApp from "@/components/dropper/FloatingWhatsApp";
+import MobileChat from "@/components/dropper/MobileChat";
 
 export default function Home() {
   return (
@@ -24,6 +25,9 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      <div className="lg:hidden">
+        <MobileChat />
+      </div>
     </div>
   );
 }
