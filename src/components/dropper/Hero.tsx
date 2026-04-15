@@ -73,7 +73,7 @@ export default function Hero() {
           EST. 2026 | PROTOCOLO IA ACTIVO
         </div>
 
-        <h1 className={`text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 md:mb-10 leading-[1.1] sm:leading-[0.95] md:leading-[0.9] transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.1s" }}>
+        <h1 className={`text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 md:mb-10 leading-[1.15] sm:leading-[1.1] md:leading-[1.05] transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.1s" }}>
           TU ECOSISTEMA DE <br />
           <span className="text-gradient-blue">E-COMMERCE CON IA</span>. <br />
           PAGO ÚNICO.
