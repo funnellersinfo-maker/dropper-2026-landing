@@ -139,7 +139,7 @@ export default function AutomationFunnel() {
           <div className={`liquid-glass rounded-3xl p-8 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.2s" }}>
             <canvas ref={canvasRef} className="w-full h-64 rounded-2xl" style={{ background: "rgba(15, 23, 42, 0.5)" }} />
           </div>
-          <div className={`hidden lg:block transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.3s" }}>
+          <div className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.3s" }}>
             <ChatBot />
           </div>
         </div>
