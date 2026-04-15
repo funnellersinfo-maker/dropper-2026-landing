@@ -4,6 +4,45 @@ import DistortionChart from "./DistortionChart";
 import { TrendingUp, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 
+function FunnelIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      {/* Top wide opening */}
+      <path d="M8 8 L56 8 L38 28 L38 44 L26 52 L26 28 Z" stroke="url(#funnelGrad)" strokeWidth="3" strokeLinejoin="round" fill="none">
+        <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="2s" fill="freeze" />
+      </path>
+      {/* Inner flow lines */}
+      <line x1="20" y1="16" x2="44" y2="16" stroke="#00D4FF" strokeWidth="1.5" strokeLinecap="round" opacity="0.6">
+        <animate attributeName="x1" values="20;24;20" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="x2" values="44;40;44" dur="3s" repeatCount="indefinite" />
+      </line>
+      <line x1="24" y1="22" x2="40" y2="22" stroke="#00D4FF" strokeWidth="1.5" strokeLinecap="round" opacity="0.4">
+        <animate attributeName="x1" values="24;28;24" dur="3s" begin="0.5s" repeatCount="indefinite" />
+        <animate attributeName="x2" values="40;36;40" dur="3s" begin="0.5s" repeatCount="indefinite" />
+      </line>
+      {/* Dripping drops */}
+      <circle cx="32" cy="52" r="2.5" fill="#FFD700" opacity="0">
+        <animate attributeName="cy" values="52;58;58" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="r" values="2.5;1.5;0" dur="1.8s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="32" cy="52" r="2" fill="#FF006E" opacity="0">
+        <animate attributeName="cy" values="52;60;60" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
+        <animate attributeName="r" values="2;1;0" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
+      </circle>
+      {/* Gradient */}
+      <defs>
+        <linearGradient id="funnelGrad" x1="8" y1="8" x2="56" y2="52" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#00D4FF" />
+          <stop offset="50%" stopColor="#FF006E" />
+          <stop offset="100%" stopColor="#FFD700" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663361269490/cXGEtqbGKFmipAQG4FeQQt/dropper-hero-bg-6sWmgkrRkBqYiaUDwrEqYm.webp";
 
 export default function Hero() {
@@ -66,6 +105,12 @@ export default function Hero() {
       <div className="absolute bottom-1/4 right-10 animate-float opacity-20 md:opacity-100 hidden lg:block" style={{ animationDelay: "1s" }}>
         <div className="liquid-glass p-4 rounded-2xl -rotate-12">
           <Zap className="w-8 h-8 text-yellow-500" />
+        </div>
+      </div>
+      {/* Funnel Icon - Right side */}
+      <div className="absolute top-1/2 right-6 md:right-16 -translate-y-1/2 animate-float opacity-30 md:opacity-100 hidden md:block" style={{ animationDelay: "0.5s" }}>
+        <div className="liquid-glass p-5 rounded-2xl rotate-6 shadow-lg shadow-blue-500/10">
+          <FunnelIcon className="w-10 h-10 md:w-14 md:h-14" />
         </div>
       </div>
 

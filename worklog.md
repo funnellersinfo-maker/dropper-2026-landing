@@ -115,3 +115,26 @@ Stage Summary:
 - Title updated successfully in Testimonials.tsx
 - New natural photos generated and compressed for fast loading
 - Total testimonial image weight: ~20KB (down from ~320KB originally)
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Add animated funnel icon to Hero right side with floating movement
+
+Work Log:
+- Analyzed user's screenshot to understand desired funnel icon placement
+- Created custom FunnelIcon SVG component with animations:
+  - Gradient stroke (Blue → Pink → Gold) matching Dropper colors
+  - Animated flow lines inside the funnel that pulse
+  - Dripping drops falling from funnel bottom in Gold and Pink
+  - Stroke draw-in animation on load
+- Added funnel icon to Hero right side (top-1/2, right-6 md:right-16)
+- Wrapped in liquid-glass container with rotate-6 tilt
+- Uses same animate-float animation as TrendingUp and Zap icons
+- Visible on md+ screens (hidden on mobile for clean layout)
+- Fixed import ordering, verified build compiles successfully
+
+Stage Summary:
+- Animated funnel icon added to Hero section right side
+- Build passes successfully
+- Icon features: gradient colors, flowing lines, dripping drops, floating animation
