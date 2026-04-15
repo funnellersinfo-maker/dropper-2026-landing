@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, Banknote, Shield, TrendingUp, MapPin, Users, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Globe, Banknote, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const FLAG_COLORS = {
@@ -9,33 +9,14 @@ const FLAG_COLORS = {
   red: "#CE1126",
 };
 
-const currencies = [
-  { code: "COP", symbol: "$", name: "Peso Colombiano", flag: "🇨🇴" },
-  { code: "MXN", symbol: "$", name: "Peso Mexicano", flag: "🇲🇽" },
-  { code: "ARS", symbol: "$", name: "Peso Argentino", flag: "🇦🇷" },
-  { code: "PEN", symbol: "S/", name: "Sol Peruano", flag: "🇵🇪" },
-  { code: "USD", symbol: "$", name: "Dólar USA", flag: "🇺🇸" },
-  { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
-  { code: "CLP", symbol: "$", name: "Peso Chileno", flag: "🇨🇱" },
-  { code: "BRL", symbol: "R$", name: "Real Brasilero", flag: "🇧🇷" },
-];
-
 export default function ColombiaMarket() {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeCurrency, setActiveCurrency] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setIsVisible(true); }, { threshold: 0.1 });
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveCurrency((prev) => (prev + 1) % currencies.length);
-    }, 2500);
-    return () => clearInterval(interval);
   }, []);
 
   const benefits = [
@@ -126,183 +107,8 @@ export default function ColombiaMarket() {
 
               <h3 className="text-xl font-bold mb-4 leading-tight">{benefit.title}</h3>
               <p className="text-gray-400 text-sm leading-relaxed flex-1">{benefit.desc}</p>
-
-              <div className="mt-6 pt-6 border-t border-white/5 flex items-center gap-2 text-xs font-bold" style={{ color: benefit.color }}>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span>VER MÁS</span>
-              </div>
             </div>
           ))}
-        </div>
-
-        {/* Currency ticker + Global reach */}
-        <div className={`liquid-glass rounded-[32px] p-8 md:p-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.5s" }}>
-          <div className="flex flex-col lg:flex-row gap-10 items-center">
-            {/* Left: Currency auto-conversion */}
-            <div className="flex-1 w-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${FLAG_COLORS.yellow}15` }}>
-                  <Banknote className="w-5 h-5" style={{ color: FLAG_COLORS.yellow }} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Conversión Automática a Tu Moneda</h3>
-                  <p className="text-xs text-gray-500">Gana en la tuya, siempre.</p>
-                </div>
-              </div>
-
-              <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                Tus comisiones se procesan y convierten automáticamente al tipo de cambio del día. Sin comisiones ocultas, sin esperas bancarias, sin dolores de cabeza. Solo ves tus ganancias reflejadas en tu moneda local.
-              </p>
-
-              {/* Rotating currency display */}
-              <div className="relative h-16 overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02]">
-                {currencies.map((currency, idx) => (
-                  <div
-                    key={currency.code}
-                    className="absolute inset-0 flex items-center justify-between px-6 transition-all duration-500"
-                    style={{
-                      transform: activeCurrency === idx ? "translateY(0) opacity(1" : activeCurrency > idx ? "translateY(-100%) opacity-0" : "translateY(100%) opacity-0",
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{currency.flag}</span>
-                      <div>
-                        <p className="font-bold text-sm">{currency.code}</p>
-                        <p className="text-[10px] text-gray-500">{currency.name}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-green-400" />
-                      <span className="text-xs font-bold text-green-400">ACTIVO</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Currency dots */}
-              <div className="flex gap-1.5 mt-4 justify-center">
-                {currencies.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveCurrency(idx)}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: activeCurrency === idx ? "24px" : "6px",
-                      height: "6px",
-                      background: activeCurrency === idx ? "#FCD116" : "rgba(255,255,255,0.1)",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Right: Global reach visual */}
-            <div className="flex-1 w-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${FLAG_COLORS.blue}15` }}>
-                  <Globe className="w-5 h-5" style={{ color: FLAG_COLORS.blue }} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Desde Cualquier País</h3>
-                  <p className="text-xs text-gray-500">Sin fronteras, sin límites.</p>
-                </div>
-              </div>
-
-              <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                Operadores de Dropper están activos en más de 15 países. La plataforma se adapta completamente a tu zona horaria, idioma y moneda. Tú pones la ambición, Dropper pone la infraestructura.
-              </p>
-
-              {/* World map dots visual */}
-              <div className="relative h-48 rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden">
-                <svg viewBox="0 0 400 200" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                  {/* Simplified continent outlines - dots pattern */}
-                  {/* South America */}
-                  <circle cx="180" cy="130" r="3" fill={FLAG_COLORS.yellow} opacity="0.6">
-                    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="195" cy="120" r="2.5" fill={FLAG_COLORS.yellow} opacity="0.8">
-                    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="190" cy="140" r="2" fill={FLAG_COLORS.blue} opacity="0.6">
-                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="200" cy="135" r="1.5" fill={FLAG_COLORS.red} opacity="0.5" />
-                  <circle cx="175" cy="145" r="1.5" fill={FLAG_COLORS.yellow} opacity="0.4" />
-                  <circle cx="185" cy="155" r="2" fill={FLAG_COLORS.blue} opacity="0.5" />
-                  <circle cx="195" cy="150" r="1" fill={FLAG_COLORS.red} opacity="0.6" />
-
-                  {/* Colombia highlight */}
-                  <circle cx="185" cy="128" r="8" fill="none" stroke={FLAG_COLORS.yellow} strokeWidth="1" opacity="0.4">
-                    <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.4;0.1;0.4" dur="3s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="185" cy="128" r="4" fill={FLAG_COLORS.yellow} opacity="0.9">
-                    <animate attributeName="r" values="3.5;4.5;3.5" dur="1.5s" repeatCount="indefinite" />
-                  </circle>
-
-                  {/* Central America & Mexico */}
-                  <circle cx="155" cy="100" r="1.5" fill={FLAG_COLORS.yellow} opacity="0.5" />
-                  <circle cx="140" cy="90" r="2" fill={FLAG_COLORS.yellow} opacity="0.6" />
-                  <circle cx="148" cy="95" r="1" fill={FLAG_COLORS.blue} opacity="0.4" />
-
-                  {/* North America */}
-                  <circle cx="120" cy="65" r="2" fill={FLAG_COLORS.blue} opacity="0.5">
-                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="110" cy="55" r="1.5" fill={FLAG_COLORS.blue} opacity="0.4" />
-                  <circle cx="130" cy="60" r="1" fill={FLAG_COLORS.red} opacity="0.3" />
-
-                  {/* Europe */}
-                  <circle cx="280" cy="50" r="2" fill={FLAG_COLORS.blue} opacity="0.6">
-                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" begin="0.5s" repeatCount="indefinite" />
-                  </circle>
-                  <circle cx="290" cy="45" r="1.5" fill={FLAG_COLORS.yellow} opacity="0.4" />
-                  <circle cx="275" cy="55" r="1" fill={FLAG_COLORS.red} opacity="0.3" />
-                  <circle cx="300" cy="60" r="1.5" fill={FLAG_COLORS.blue} opacity="0.5" />
-
-                  {/* Connection lines */}
-                  <line x1="185" y1="128" x2="140" y2="90" stroke={FLAG_COLORS.yellow} strokeWidth="0.5" opacity="0.15" strokeDasharray="4 4">
-                    <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" repeatCount="indefinite" />
-                  </line>
-                  <line x1="185" y1="128" x2="120" y2="65" stroke={FLAG_COLORS.blue} strokeWidth="0.5" opacity="0.1" strokeDasharray="4 4">
-                    <animate attributeName="stroke-dashoffset" values="0;8" dur="2s" begin="0.3s" repeatCount="indefinite" />
-                  </line>
-                  <line x1="185" y1="128" x2="280" y2="50" stroke={FLAG_COLORS.blue} strokeWidth="0.5" opacity="0.1" strokeDasharray="4 4">
-                    <animate attributeName="stroke-dashoffset" values="0;8" dur="3s" repeatCount="indefinite" />
-                  </line>
-                </svg>
-
-                {/* Labels */}
-                <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: FLAG_COLORS.yellow }} />
-                  <span className="text-[10px] font-bold text-gray-500">15+ PAÍSES ACTIVOS</span>
-                </div>
-                <div className="absolute bottom-3 right-4 flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: FLAG_COLORS.blue }} />
-                  <span className="text-[10px] font-bold text-gray-500">24/7 GLOBAL</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom CTA with Colombian flag */}
-        <div className={`mt-12 text-center transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "0.7s" }}>
-          <div className="inline-flex items-center gap-4 liquid-glass rounded-full px-6 py-3">
-            <div className="flex gap-0.5">
-              <div className="w-3 h-8 rounded-l-sm" style={{ background: FLAG_COLORS.yellow }} />
-              <div className="w-3 h-8" style={{ background: FLAG_COLORS.blue }} />
-              <div className="w-3 h-8 rounded-r-sm" style={{ background: FLAG_COLORS.red }} />
-            </div>
-            <span className="text-sm font-bold text-gray-300">
-              Potencia tu negocio en el mercado que más crece de la región
-            </span>
-            <div className="flex gap-0.5">
-              <div className="w-3 h-8 rounded-l-sm" style={{ background: FLAG_COLORS.red }} />
-              <div className="w-3 h-8" style={{ background: FLAG_COLORS.blue }} />
-              <div className="w-3 h-8 rounded-r-sm" style={{ background: FLAG_COLORS.yellow }} />
-            </div>
-          </div>
         </div>
       </div>
     </section>
