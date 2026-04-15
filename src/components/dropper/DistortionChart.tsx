@@ -1,24 +1,30 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export default function DistortionChart() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mousePosRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number | null>(null);
   const timeRef = useRef<number>(0);
+  const rafPending = useRef(false);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = useCallback((e: MouseEvent) => {
       if (canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
-        setMousePos({
+        mousePosRef.current = {
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
-        });
+        };
+        if (!rafPending.current) {
+          rafPending.current = true;
+          requestAnimationFrame(() => { rafPending.current = false; });
+        }
       }
-    };
-    window.addEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
@@ -35,6 +41,8 @@ export default function DistortionChart() {
 
     const animate = () => {
       timeRef.current += 0.01;
+      const mousePos = mousePosRef.current;
+
       ctx.fillStyle = "rgba(3, 3, 3, 0.1)";
       ctx.fillRect(0, 0, width, height);
 
@@ -91,7 +99,7 @@ export default function DistortionChart() {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [mousePos]);
+  }, []);
 
   return (
     <canvas
